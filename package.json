@@ -9,12 +9,7 @@
   "author": "hta",
   "license": "MIT",
   "devDependencies": {
-    "jasmine": "^2.3.1",
-    "nodemon": "^1.3.7",
-    "protractor": "^2.1.0"
   },
   "dependencies": {
-    "ejs": "^2.3.1",
-    "express": "^4.12.4"
   }
 }
