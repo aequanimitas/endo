@@ -8,8 +8,8 @@
   },
   "author": "hta",
   "license": "MIT",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
+    "pg": "^4.4.2"
   }
 }
