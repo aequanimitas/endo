@@ -42,11 +42,18 @@ function prepItem(iName, iArgs) {
       }
     }
   });
-  console.log(item);
   manufactureToday(item);
 };
 
+function usage() {
+  console.log("Options go here");
+};
+
 function init(args) {
+  if (args.length === 0) {
+    usage();
+    return;
+  }
   var hasArgs = args.map(getNamedArguments).filter(removedUndefineds);
   if (hasArgs.length > 0) {
     prepItem(args[0], hasArgs);
