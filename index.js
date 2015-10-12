@@ -1,18 +1,13 @@
 var moment = require("moment"),
     db = require("./db"),
-    operations = {
-      "add": create
-    },
-    item = {},
     date_format = "YYYY-MM-DD";
 
-function create() {
+function manufactureToday(item) {
   if (!item["manufacture"]) {
     item["manufacture"] = moment(new Date()).format(date_format);
   }
-  console.log(item);
   var dta = [item["name"], item["manufacture"], item["expiry"]];
-  db.query("INSERT INTO endo_items VALUES (DEFAULT, $1, $2, $3)", dta);
+  db.add(item, dta);
 }
 
 function getNamedArguments(e) {
@@ -26,10 +21,11 @@ function removedUndefineds(e) {
 function defaultPath(e) {
   item["name"] = e[0];
   item["expiry"] = e[1];
-  create();
+  manufactureToday(item);
 }
 
 function prepItem(iName, iArgs) {
+  var item = {};
   item["name"] = iName;
   Array.prototype.forEach.call(iArgs, function(e,i,a) {
     if (e.includes("--") && e.indexOf("=") > 0) {
@@ -47,11 +43,10 @@ function prepItem(iName, iArgs) {
     }
   });
   console.log(item);
-  create();
+  manufactureToday(item);
 };
 
 function init(args) {
-  var item = {};
   var hasArgs = args.map(getNamedArguments).filter(removedUndefineds);
   if (hasArgs.length > 0) {
     prepItem(args[0], hasArgs);
