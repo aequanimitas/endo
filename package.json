@@ -1,7 +1,7 @@
 {
   "name": "endo",
   "version": "0.0.1",
-  "description": "monitoring app",
+  "description": "consumable monitoring  app",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/jasmine/bin/jasmine"

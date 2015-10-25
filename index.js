@@ -1,6 +1,7 @@
 var moment = require("moment"),
     db = require("./db"),
     date_format = "YYYY-MM-DD";
+    packageInfo = require("./package.json");
 
 function manufactureToday(item) {
   if (!item["manufacture"]) {
@@ -63,14 +64,19 @@ function init(args) {
 }
 
 function startTask(opts) {
-  console.log("\nTedious: For things that you do repeatedly\n");
-  if (opts.length == 0) {
-    console.log("Available commands: " + Object.keys(subapps).join(", ") + "\n");
-  } else if (opts.length == 1) {
-    console.log("Available commands for " + opts[0] + ": " + subapps[opts[0]].operations.join(", ") + "\n");
+  console.log("\n" + packageInfo.name + ": " + packageInfo.description + "\n");
+  if (typeof subapps !== "undefined") {
+    if (opts.length == 0) {
+      console.log("Available commands: " + Object.keys(subapps).join(", ") + "\n");
+    } else if (opts.length == 1) {
+      console.log("Available commands for " + opts[0] + ": " + subapps[opts[0]].operations.join(", ") + "\n");
+    } else {
+      subapps[opts[0]].init(opts.slice(1));
+    }
   } else {
-    subapps[opts[0]].init(opts.slice(1));
+    console.log("No apps defined");
   }
 }
 
-init(process.argv.slice(2));
+//init(process.argv.slice(2));
+startTask(process.argv.slice(2));
