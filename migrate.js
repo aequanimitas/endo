@@ -46,11 +46,11 @@ function createTables () {
   var tables = [],
       tableNames = Object.keys(Schema);
 
-      tables = tableNames.map(function (tableName) {
-          return function () {
-            return createTable(tableName);
-          };
-      });
+  tables = tableNames.map(function (tableName) {
+      return function () {
+        return createTable(tableName);
+      };
+  });
   return sequence(tables);
 }
 
