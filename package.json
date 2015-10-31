@@ -10,6 +10,8 @@
   "license": "MIT",
   "devDependencies": {},
   "dependencies": {
+    "bookshelf": "^0.8.2",
+    "knex": "^0.8.6",
     "moment": "^2.10.6",
     "pg": "^4.4.2"
   }
