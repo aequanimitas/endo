@@ -60,5 +60,9 @@ createTables()
     process.exit(0);
   })
   .otherwise(function (error) {
-    throw error;
+    if (error.code == '42P07') {
+      console.error("Duplicate Table: " + error);
+    } else {
+      throw error;
+    }
   });
