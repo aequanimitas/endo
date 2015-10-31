@@ -1,5 +1,6 @@
 var moment = require("moment"),
     db = require("./db"),
+    tresdin = require("./tresdin.js"),
     date_format = "YYYY-MM-DD";
     packageInfo = require("./package.json");
 
@@ -51,6 +52,7 @@ function usage() {
 };
 
 function init(args) {
+  tr
   if (args.length === 0) {
     usage();
     return;
