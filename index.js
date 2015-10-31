@@ -1,11 +1,11 @@
 var moment = require('moment'),
     tresdin = require('./tresdin.js'),
-    date_format = 'YYYY-MM-DD';
+    dateFormat = 'YYYY-MM-DD HH:mm:s.ms Z';
     packageInfo = require('./package.json');
 
 function manufactureToday(item) {
   if (!item['manufacture']) {
-    item['manufacture'] = moment(new Date()).format(date_format);
+    item['manufacture'] = moment(new Date()).format(dateFormat);
   }
   var dta = [item['name'], item['manufacture'], item['expiry']];
   db.add(item, dta);
@@ -68,7 +68,12 @@ function startTask(opts) {
 // just insert for now, familiarization purposes
   var models = require('./models');
   models.Item.forge({
-    name: opts[0] 
+    name: opts[0],
+    createdAt: moment(new Date()).format(dateFormat),
+    updatedAt: moment(new Date()).format(dateFormat), 
+    updatedAt: moment(new Date()).format(dateFormat),
+    manufactureDate: moment(new Date()).format(dateFormat),
+    expirationDate: moment(new Date()).format(dateFormat) 
   })
   .save()
   .then(function(item) {
