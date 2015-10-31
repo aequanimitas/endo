@@ -69,6 +69,7 @@ function startTask(opts) {
   var models = require('./models');
   models.Item.forge({
     name: opts[0],
+    serialNumber: opts[1],
     createdAt: moment(new Date()).format(dateFormat),
     updatedAt: moment(new Date()).format(dateFormat), 
     updatedAt: moment(new Date()).format(dateFormat),
