@@ -41,3 +41,7 @@ function help(app) {
   });
   process.stdout.write("\n");
 }
+
+exports.withFlags = function(app) {
+  console.dir(app);
+};
