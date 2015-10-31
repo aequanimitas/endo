@@ -1,46 +1,45 @@
-var moment = require("moment"),
-    db = require("./db"),
-    tresdin = require("./tresdin.js"),
-    date_format = "YYYY-MM-DD";
-    packageInfo = require("./package.json");
+var moment = require('moment'),
+    tresdin = require('./tresdin.js'),
+    date_format = 'YYYY-MM-DD';
+    packageInfo = require('./package.json');
 
 function manufactureToday(item) {
-  if (!item["manufacture"]) {
-    item["manufacture"] = moment(new Date()).format(date_format);
+  if (!item['manufacture']) {
+    item['manufacture'] = moment(new Date()).format(date_format);
   }
-  var dta = [item["name"], item["manufacture"], item["expiry"]];
+  var dta = [item['name'], item['manufacture'], item['expiry']];
   db.add(item, dta);
 }
 
 function getNamedArguments(e) {
-  if (e.includes("--") && e.indexOf("=") > 0) return e;
+  if (e.includes('--') && e.indexOf('=') > 0) return e;
 }
 
 function removedUndefineds(e) {
-  if (e !== "undefined") return e;
+  if (e !== 'undefined') return e;
 }
 
 function defaultPath(e) {
-  item["name"] = e[0];
-  item["expiry"] = e[1];
+  item['name'] = e[0];
+  item['expiry'] = e[1];
   manufactureToday(item);
 }
 
 function prepItem(iName, iArgs) {
   var item = {};
-  item["name"] = iName;
+  item['name'] = iName;
   Array.prototype.forEach.call(iArgs, function(e,i,a) {
-    if (e.includes("--") && e.indexOf("=") > 0) {
+    if (e.includes('--') && e.indexOf('=') > 0) {
       var e = e.slice(2);
-      var keyValue = e.split("=");
+      var keyValue = e.split('=');
       var e = {
-        "key": keyValue[0],
-        "value": keyValue[1]
+        'key': keyValue[0],
+        'value': keyValue[1]
       }
-      if (keyValue[0] == "expiry") {
-        item["expiry"] = keyValue[1];
+      if (keyValue[0] == 'expiry') {
+        item['expiry'] = keyValue[1];
       } else {
-        item["manufacture"] = keyValue[1];
+        item['manufacture'] = keyValue[1];
       }
     }
   });
@@ -48,7 +47,7 @@ function prepItem(iName, iArgs) {
 };
 
 function usage() {
-  console.log("Options go here");
+  console.log('Options go here');
 };
 
 function init(args) {
@@ -66,18 +65,30 @@ function init(args) {
 }
 
 function startTask(opts) {
-  console.log("\n" + packageInfo.name + ": " + packageInfo.description + "\n");
-  if (typeof subapps !== "undefined") {
-    if (opts.length == 0) {
-      console.log("Available commands: " + Object.keys(subapps).join(", ") + "\n");
-    } else if (opts.length == 1) {
-      console.log("Available commands for " + opts[0] + ": " + subapps[opts[0]].operations.join(", ") + "\n");
-    } else {
-      subapps[opts[0]].init(opts.slice(1));
-    }
-  } else {
-    console.log("No apps defined");
-  }
+// just insert for now, familiarization purposes
+  var models = require('./models');
+  models.Item.forge({
+    name: opts[0] 
+  })
+  .save()
+  .then(function(item) {
+    console.log(item);
+  })
+  .catch(function(err) {
+    console.error(err); 
+  });
+//  console.log('\n' + packageInfo.name + ': ' + packageInfo.description + '\n');
+//  if (typeof subapps !== 'undefined') {
+//    if (opts.length == 0) {
+//      console.log('Available commands: ' + Object.keys(subapps).join(', ') + '\n');
+//    } else if (opts.length == 1) {
+//      console.log('Available commands for ' + opts[0] + ': ' + subapps[opts[0]].operations.join(', ') + '\n');
+//    } else {
+//      subapps[opts[0]].init(opts.slice(1));
+//    }
+//  } else {
+//    console.log('No apps defined');
+//  }
 }
 
 //init(process.argv.slice(2));
