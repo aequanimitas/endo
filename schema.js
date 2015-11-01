@@ -6,6 +6,6 @@ module.exports = {
     updatedAt: {type: 'dateTime', nullable: false},
     manufactureDate: {type: 'dateTime', nullable: false},
     expirationDate: {type: 'dateTime', nullable: false},
-    serialNumber: {type: 'string', maxlength: 254, nullable: false, unique:true},
+    serialNumber: {type: 'string', maxlength: 254, nullable: false},
   },
 };

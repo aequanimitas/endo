@@ -7,7 +7,7 @@ var appName = "",
        },
        'missingArgs': function(flagArgs) {
           var missingArguments = flagArgs.map(removeFlagSymbols),
-          hasS = missingArguments.length > 1 ? 's' : '';
+              hasS = missingArguments.length > 1 ? 's' : '';
           return '\nThe required flag' + hasS + 
                  ' has no argument' + hasS +
                  ': ' + missingArguments + '\n';
@@ -90,4 +90,4 @@ exports.withFlags = function(app) {
     exitMessage(messages['missingArgs'](flagsHasArguments(app)));
   };
   return toObjPair(app.args);
-};
+}
