@@ -63,10 +63,11 @@ function flagsHasArguments(app) {
   });
 }
 
-function toObjPair(pairs) {
+function toObjPair(pairs, cb) {
   var obj = {}
   pairs.forEach(function(x) {
     var t = x.split('=');
+    if (cb) t[0] = cb(t[0]);
     obj[t[0]] = t[1];
   });
   return obj;
@@ -89,5 +90,5 @@ exports.withFlags = function(app) {
   if (flagsHasArguments(app).length > 0) {
     exitMessage(messages['missingArgs'](flagsHasArguments(app)));
   };
-  return toObjPair(app.args);
+  return toObjPair(app.args, removeFlagSymbols);
 }

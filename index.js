@@ -21,8 +21,8 @@ function startTask(args) {
       },
       itemModel = cli.withFlags(obj);
   if (itemModel) {
-    item.name = itemModel['-item']
-    item.expirationDate = itemModel['-bb'];
+    item.name = itemModel['item']
+    item.expirationDate = itemModel['bb'];
     item.serialNumber = '123456';
     models.Item.forge(item)
     .save()
