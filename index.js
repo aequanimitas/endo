@@ -20,12 +20,11 @@ function startTask(args) {
         requiredFlags: ['-bb', '-item']
       },
       itemModel = cli.withFlags(obj);
-  if (itemModel.obj) {
-    item.name = itemModel.obj(['-item']);
-    item.expirationDate = itemModel.obj(['-bb']);
-    item.serialNumber = '123456'; 
-    models.Item
-    .forge(item)
+  if (itemModel) {
+    item.name = itemModel['-item']
+    item.expirationDate = itemModel['-bb'];
+    item.serialNumber = '123456';
+    models.Item.forge(item)
     .save()
     .then(function(item) {
       console.log(item);
