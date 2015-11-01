@@ -55,8 +55,9 @@ function createTables () {
 }
 
 createTables()
-  .then(function() {
-    console.log('Tables created!!');
+  .then(function(v) {
+    // inspect when
+    console.log('Table created');
     process.exit(0);
   })
   .otherwise(function (error) {
@@ -65,4 +66,7 @@ createTables()
     } else {
       throw error;
     }
+  })
+  .finally(function() {
+    knex.destroy();
   });

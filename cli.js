@@ -1,9 +1,18 @@
-var appName = "", appDescription = "";
-exports = module.exports = {};
-
-var messages = {
-  unOpts: function(m) { return "Unrecognized option: " + m + "\n"; }
-};
+var appName = "", 
+    appDescription = "";
+    exports = module.exports = {},
+    messages = {
+      'requiredFlags': function(flags) {
+         return '\nrequired flags missing: ' + flags + '\n'
+       },
+       'missingArgs': function(flagArgs) {
+          var missingArguments = flagArgs.map(removeFlagSymbols),
+          hasS = missingArguments.length > 1 ? 's' : '';
+          return '\nThe required flag' + hasS + 
+                 ' has no argument' + hasS +
+                 ': ' + missingArguments + '\n';
+       }
+    };
 
 function circular(app, opt, args) {
   if (opOrApp(app, opt, "subapps")) {
@@ -11,7 +20,6 @@ function circular(app, opt, args) {
   } else if (opOrApp(app, opt, "operations")) {
     app.operations[opt]();
   } else {
-//    process.stdout.write("Unrecognized option: " + opt);
     help(app);
   }
 }
@@ -31,17 +39,55 @@ function opOrApp(app, opt, prop) {
 }
 
 function help(app) {
-  var keyz = Object.keys(app.subapps ? app.subapps : app.operations).join(", ");
+  var keyz = Object.keys(app.subapps ? app.subapps : app.operations).join(", "),
+      message = "\n" + appName + ": " + appDescription + "\n\n" +
+                "\nUsage";
   if (keyz.length == 0) keyz = "none"
-  process.stdout.write("\n" + appName + ": " + appDescription + "\n\n");
-  process.stdout.write("\Usage:");
   keyz.split(", ").forEach(function(v) {
     var appInvoke = appName + " " + app.name;
-    process.stdout.write("\n  " + appInvoke + " " + v);
+    message += "\n  " + appInvoke + " " + v;
   });
-  process.stdout.write("\n");
+  exitMessage(message);
 }
 
+function arrDiff(x, y) {
+  return x.filter(function(a) {
+    return y.indexOf(a) < 0;
+  });
+};
+
+function flagsHasArguments(app) {
+  return app.args.filter(function(x) {
+    var t = x.split('=');
+    return (t[1] === undefined || t[1] === '')
+  });
+}
+
+function toObjPair(pairs) {
+  var obj = {}
+  pairs.forEach(function(x) {
+    var t = x.split('=');
+    obj[t[0]] = t[1];
+  });
+  return obj;
+};
+
+function removeFlagSymbols(x) {
+  return x.replace(/-|=/g, '');
+}
+
+function exitMessage(message) {
+  console.error(message);
+  process.exit(0);
+};
+
 exports.withFlags = function(app) {
-  console.dir(app);
+  if (app.requiredFlags) {
+    var missingFlags = arrDiff(app.requiredFlags, Object.keys(toObjPair(app.args))).map(removeFlagSymbols);
+    if (missingFlags.length > 0) exitMessage(messages['requiredFlags'](missingFlags));
+  }
+  if (flagsHasArguments(app).length > 0) {
+    exitMessage(messages['missingArgs'](flagsHasArguments(app)));
+  };
+  return toObjPair(app.args);
 };

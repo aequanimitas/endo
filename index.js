@@ -1,7 +1,16 @@
 var moment = require('moment'),
-    tresdin = require('./tresdin.js'),
-    dateFormat = 'YYYY-MM-DD HH:mm:s.ms Z';
-    packageInfo = require('./package.json');
+    cli = require('./cli'),
+    dateFormat = 'YYYY-MM-DD HH:mm:s.ms Z',
+    packageInfo = require('./package.json'),
+    item = { 
+      name: '',
+      serialNumber: '',
+      createdAt: moment(new Date()).format(dateFormat),
+      updatedAt: moment(new Date()).format(dateFormat),
+      manufactureDate: '',
+      expirationDate: '',
+    },
+    knex = require('./common').knex;
 
 function manufactureToday(item) {
   if (!item['manufacture']) {
@@ -51,7 +60,6 @@ function usage() {
 };
 
 function init(args) {
-  tr
   if (args.length === 0) {
     usage();
     return;
@@ -64,38 +72,35 @@ function init(args) {
   }
 }
 
-function startTask(opts) {
+function startTask(args) {
 // just insert for now, familiarization purposes
-  var models = require('./models');
-  models.Item.forge({
-    name: opts[0],
-    serialNumber: opts[1],
-    createdAt: moment(new Date()).format(dateFormat),
-    updatedAt: moment(new Date()).format(dateFormat), 
-    updatedAt: moment(new Date()).format(dateFormat),
-    manufactureDate: moment(new Date()).format(dateFormat),
-    expirationDate: moment(new Date()).format(dateFormat) 
-  })
-  .save()
-  .then(function(item) {
-    console.log(item);
-  })
-  .catch(function(err) {
-    console.error(err); 
-  });
-//  console.log('\n' + packageInfo.name + ': ' + packageInfo.description + '\n');
-//  if (typeof subapps !== 'undefined') {
-//    if (opts.length == 0) {
-//      console.log('Available commands: ' + Object.keys(subapps).join(', ') + '\n');
-//    } else if (opts.length == 1) {
-//      console.log('Available commands for ' + opts[0] + ': ' + subapps[opts[0]].operations.join(', ') + '\n');
-//    } else {
-//      subapps[opts[0]].init(opts.slice(1));
-//    }
-//  } else {
-//    console.log('No apps defined');
-//  }
+  var models = require('./models'),
+      obj = {
+        args: process.argv.slice(2),
+        requiredFlags: ['-bb', '-item']
+      },
+      itemModel = cli.withFlags(obj);
+  if (itemModel.obj) {
+    models.Item.forge({
+      name: itemModel.obj['-item'],
+      serialNumber: '123456',
+      createdAt: moment(new Date()).format(dateFormat),
+      updatedAt: moment(new Date()).format(dateFormat),
+      manufactureDate: moment(new Date()).format(dateFormat),
+      expirationDate: itemModel.obj['-bb']
+    })
+    .save()
+    .then(function(item) {
+      console.log(item);
+    })
+    .catch(function(err) {
+      console.error(err); 
+    })
+//   just destroy for now since this is still a cli app
+    .finally(function() {
+      knex.destroy();
+    });
+  }
 }
 
-//init(process.argv.slice(2));
 startTask(process.argv.slice(2));

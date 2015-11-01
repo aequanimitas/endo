@@ -1,7 +1,7 @@
 module.exports = {
   item: {
     id: {type: 'increments', nullable: false, primary: true},
-    name: {type: 'string', maxlength: 254, nullable: false, unique: true},
+    name: {type: 'string', maxlength: 254, nullable: false},
     createdAt: {type: 'dateTime', nullable: false},
     updatedAt: {type: 'dateTime', nullable: false},
     manufactureDate: {type: 'dateTime', nullable: false},
