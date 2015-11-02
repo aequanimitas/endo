@@ -1,6 +1,6 @@
+exports = module.exports = {};
 var appName = "", 
     appDescription = "";
-    exports = module.exports = {},
     messages = {
       'requiredFlags': function(flags) {
          return '\nrequired flags missing: ' + flags + '\n'
@@ -56,11 +56,11 @@ function arrDiff(x, y) {
   });
 };
 
-function flagsHasArguments(app) {
-  return app.args.filter(function(x) {
-    var t = x.split('=');
-    return (t[1] === undefined || t[1] === '')
-  });
+function flagsHasArguments(x) {
+  console.log('Inside flagsHasArguments');
+  console.log(x);
+  var t = x.split('=');
+  return (t[1] === undefined || t[1] === '')
 }
 
 function toObjPair(pairs, cb) {
@@ -83,12 +83,15 @@ function exitMessage(message) {
 };
 
 exports.withFlags = function(app) {
+  var missingFlags = arrDiff(app.requiredFlags, 
+                             Object.keys(toObjPair(app.args)))
+                             .map(removeFlagSymbols),
+      flagArgs = app.args.filter(flagsHasArguments);
   if (app.requiredFlags) {
-    var missingFlags = arrDiff(app.requiredFlags, Object.keys(toObjPair(app.args))).map(removeFlagSymbols);
     if (missingFlags.length > 0) exitMessage(messages['requiredFlags'](missingFlags));
   }
-  if (flagsHasArguments(app).length > 0) {
-    exitMessage(messages['missingArgs'](flagsHasArguments(app)));
+  if (flagArgs.length > 0) {
+    exitMessage(messages['missingArgs'](flagArgs));
   };
   return toObjPair(app.args, removeFlagSymbols);
 }

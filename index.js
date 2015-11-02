@@ -26,8 +26,9 @@ function startTask(args) {
     item.serialNumber = '123456';
     models.Item.forge(item)
     .save()
-    .then(function(item) {
-      console.log(item);
+    .then(function(model) {
+      console.log(model.attributes.name + ' has been saved and will expire at '+ 
+                  moment(model.attributes.expirationDate).format('dddd, Do of MMMM YYYY'));
     })
     .catch(function(err) {
       console.error(err); 

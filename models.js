@@ -9,3 +9,6 @@ var common = require('./common'),
 
 exports.Item = Item;
 exports.Items = Items;
+exports.save = function(item) {
+
+};
