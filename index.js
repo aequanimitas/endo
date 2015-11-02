@@ -12,6 +12,21 @@ var moment = require('moment'),
     },
     knex = require('./common').knex;
 
+function objValid(obj) {
+  // add valid formats
+  var errorStack = [];
+
+      if (!moment(obj['bb']).isValid()) {
+        errorStack.push('Expiration date invalid, invalid format');
+      }
+
+      if(moment(new Date()) < moment(obj['bb'])) {
+        errorStack.push('Expiration date invalid, should be after today');
+      }
+      
+  return errorStack;
+}
+
 function startTask(args) {
 // just insert for now, familiarization purposes
   var models = require('./models'),
@@ -20,9 +35,9 @@ function startTask(args) {
         requiredFlags: ['-bb', '-item']
       },
       itemModel = cli.withFlags(obj);
-  if (itemModel) {
+  if (objValid(itemModel).length == 0) {
     item.name = itemModel['item']
-    item.expirationDate = itemModel['bb'];
+    item.expirationDate = moment(itemModel['bb']).format(dateFormat);
     item.serialNumber = '123456';
     models.Item.forge(item)
     .save()
@@ -37,6 +52,8 @@ function startTask(args) {
     .finally(function() {
       knex.destroy();
     });
+  } else {
+    throw new Error(objValid(itemModel).join('\n'));
   }
 }
 
