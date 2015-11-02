@@ -1,18 +1,7 @@
 exports = module.exports = {};
 var appName = "", 
-    appDescription = "";
-    messages = {
-      'requiredFlags': function(flags) {
-         return '\nrequired flags missing: ' + flags + '\n'
-       },
-       'missingArgs': function(flagArgs) {
-          var missingArguments = flagArgs.map(removeFlagSymbols),
-              hasS = missingArguments.length > 1 ? 's' : '';
-          return '\nThe required flag' + hasS + 
-                 ' has no argument' + hasS +
-                 ': ' + missingArguments + '\n';
-       }
-    };
+    appDescription = "",
+    messages = require('./error').messages;
 
 function circular(app, opt, args) {
   if (opOrApp(app, opt, "subapps")) {
@@ -57,8 +46,6 @@ function arrDiff(x, y) {
 };
 
 function flagsHasArguments(x) {
-  console.log('Inside flagsHasArguments');
-  console.log(x);
   var t = x.split('=');
   return (t[1] === undefined || t[1] === '')
 }
@@ -78,17 +65,17 @@ function removeFlagSymbols(x) {
 }
 
 function exitMessage(message) {
-  console.error(message);
-  process.exit(0);
+  throw new Error(message);
 };
+
 
 exports.withFlags = function(app) {
   var missingFlags = arrDiff(app.requiredFlags, 
                              Object.keys(toObjPair(app.args)))
                              .map(removeFlagSymbols),
       flagArgs = app.args.filter(flagsHasArguments);
-  if (app.requiredFlags) {
-    if (missingFlags.length > 0) exitMessage(messages['requiredFlags'](missingFlags));
+  if (app.requiredFlags && missingFlags.length > 0) {
+    exitMessage(messages['requiredFlags'](missingFlags));
   }
   if (flagArgs.length > 0) {
     exitMessage(messages['missingArgs'](flagArgs));
