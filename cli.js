@@ -1,4 +1,5 @@
 exports = module.exports = {};
+var messages = require('./error/messages');
 
 function arrDiff(x, y) {
   return x.filter(function(a) {
@@ -52,7 +53,7 @@ exports.withFlags = function(app) {
     exitMessage(messages['requiredFlags'](missingFlags));
   }
   if (flagArgs.length > 0) {
-    exitMessage(messages['missingArgs'](flagArgs));
+    exitMessage(messages['missingArgs'](flagArgs.map(removeFlagSymbols)));
   };
   return toObjPair(app.args, removeFlagSymbols);
 }
