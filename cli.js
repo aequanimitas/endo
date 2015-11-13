@@ -40,9 +40,9 @@ function removeFlagSymbols(x) {
 }
 
 function exitMessage(message) {
-  throw new Error(message);
+  console.error(message);
+  process.exit(1);
 };
-
 
 exports.withFlags = function(app) {
   var missingFlags = arrDiff(app.requiredFlags, 
@@ -50,10 +50,10 @@ exports.withFlags = function(app) {
                              .map(removeFlagSymbols),
       flagArgs = app.args.filter(flagsHasArguments);
   if (app.requiredFlags && missingFlags.length > 0) {
-    exitMessage(messages['requiredFlags'](missingFlags));
+    exitMessage.call(this, messages['requiredFlags'](missingFlags));
   }
   if (flagArgs.length > 0) {
-    exitMessage(messages['missingArgs'](flagArgs.map(removeFlagSymbols)));
+    exitMessage.call(messages['missingArgs'](flagArgs.map(removeFlagSymbols)));
   };
   return toObjPair(app.args, removeFlagSymbols);
 }
