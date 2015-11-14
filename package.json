@@ -4,11 +4,14 @@
   "description": "consumable monitoring  app",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/jasmine/bin/jasmine"
+    "test": "./node_modules/jasmine/bin/jasmine",
+    "lint": "eslint *.js"
   },
   "author": "hta",
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^1.9.0"
+  },
   "dependencies": {
     "bookshelf": "^0.8.2",
     "knex": "^0.8.6",
