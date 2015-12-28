@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/jasmine/bin/jasmine",
-    "lint": "eslint *.js"
+    "lint": "eslint *.js",
+    "bats": "bats test/bats/*.bats"
   },
   "author": "hta",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^1.9.0"
+    "eslint": "^1.9.0",
+    "karma": "^0.13.16"
   },
   "dependencies": {
     "bookshelf": "^0.8.2",
