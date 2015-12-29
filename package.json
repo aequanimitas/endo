@@ -1,18 +1,19 @@
 {
-  "name": "endo",
+  "name": "Endo",
   "version": "0.0.1",
   "description": "consumable monitoring  app",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/jasmine/bin/jasmine",
     "lint": "eslint *.js",
-    "bats": "bats test/bats/*.bats"
+    "bats": "bats test/bats/*.bats",
+    "watch": "onchange *.js -- bats -p test/bats/*.bats"
   },
   "author": "hta",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^1.9.0",
-    "karma": "^0.13.16"
+    "onchange": "^2.0.0"
   },
   "dependencies": {
     "bookshelf": "^0.8.2",
