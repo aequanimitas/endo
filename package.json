@@ -7,12 +7,14 @@
     "test": "./node_modules/jasmine/bin/jasmine",
     "lint": "eslint *.js",
     "bats": "bats test/bats/*.bats",
-    "watch": "onchange *.js -- bats -p test/bats/*.bats"
+    "watch": "npm run watch:onchange:bats",
+    "watch:onchange:bats": "onchange '*.js' 'test/bats/*bats' -- bats -p test/bats/*.bats"
   },
   "author": "hta",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^1.9.0",
+    "mocha": "^2.3.4",
     "onchange": "^2.0.0"
   },
   "dependencies": {
